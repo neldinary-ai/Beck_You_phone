@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#08090b" />
+<title>YOU — A Canon Archive · Nada Farag Elsayed Farag</title>
+<meta name="description" content="An interactive, canon-faithful study of Caroline Kepnes's novel You (2014). Created by Nada Farag Elsayed Farag." />
+<meta name="author" content="Nada Farag Elsayed Farag" />
+<style>
+:root{
+  --bg:#08090b;
+  --bg-2:#0d0f13;
+  --panel:#111419;
+  --panel-2:#161a20;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.16);
+  --ink:#eee9df;
+  --ink-soft:#cfc8bb;
+  --muted:#918b80;
+  --dim:#625d55;
+  --amber:#d8a657;
+  --amber-soft:rgba(216,166,87,.12);
+  --amber-line:rgba(216,166,87,.34);
+  --signal:#7fe0a8;
+  --danger:#d87979;
+  --blue:#7d9fd4;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --max:1360px;
+  --radius:18px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  background:
+    radial-gradient(70% 55% at 12% -10%, rgba(53,67,90,.32), transparent 62%),
+    radial-gradient(60% 50% at 96% 12%, rgba(120,82,35,.16), transparent 62%),
+    radial-gradient(80% 80% at 50% 105%, rgba(30,40,55,.22), transparent 60%),
+    var(--bg);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 4px);
+  opacity:.45;
+  mask-image:radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
+img,svg{display:block}
+::selection{background:rgba(216,166,87,.28);color:#fff}
+[hidden]{display:none !important}
+
+/* ---------- shell ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  background:rgba(8,9,11,.78);
+  border-bottom:1px solid var(--line);
+}
+.topbar__inner{
+  max-width:var(--max);margin:0 auto;
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand__mark{font-family:var(--serif);font-size:23px;letter-spacing:.08em;color:var(--ink)}
+.brand__sub{font-family:var(--mono);font-size:7px;letter-spacing:.26em;text-transform:uppercase;color:var(--amber)}
+.topbar__credit{
+  font-family:var(--mono);font-size:7px;line-height:1.6;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--dim);text-align:right;
+}
+.topbar__credit b{display:block;color:var(--ink-soft);font-weight:500;font-size:8px;letter-spacing:.11em}
+.topbar__badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--signal);border:1px solid rgba(127,224,168,.25);border-radius:999px;
+  padding:4px 7px;background:rgba(127,224,168,.05);white-space:nowrap;
+}
+.topbar__badge i{width:5px;height:5px;border-radius:50%;background:var(--signal);box-shadow:0 0 8px rgba(127,224,168,.8)}
+
+.layout{
+  position:relative;z-index:1;
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:250px minmax(0,1fr);
+  gap:34px;padding:28px 24px 80px;
+}
+.sidebar{position:sticky;top:92px;align-self:start}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav__btn{
+  display:flex;align-items:center;gap:11px;
+  width:100%;text-align:left;padding:11px 12px;border-radius:10px;
+  color:var(--muted);transition:background .18s,color .18s;
+  border:1px solid transparent;
+}
+.nav__btn:hover{background:rgba(255,255,255,.04);color:var(--ink-soft)}
+.nav__btn.is-active{background:linear-gradient(90deg,var(--amber-soft),rgba(216,166,87,.02));border-color:var(--amber-line);color:var(--ink)}
+.nav__n{font-family:var(--mono);font-size:8px;color:var(--dim);width:18px;flex:0 0 auto}
+.nav__btn.is-active .nav__n{color:var(--amber)}
+.nav__label{font-size:12px;letter-spacing:.01em}
+.sidebar__meta{margin-top:28px;padding-top:18px;border-top:1px solid var(--line)}
+.sidebar__meta p{margin:0 0 9px;font-family:var(--mono);font-size:7px;line-height:1.9;letter-spacing:.13em;text-transform:uppercase;color:var(--dim)}
+.sidebar__meta b{color:var(--ink-soft);font-weight:500}
+.sidebar__rule{width:34px;height:1px;background:var(--amber-line);margin:14px 0}
+
+/* ---------- panels ---------- */
+.panel{display:none;animation:panelIn .35s cubic-bezier(.22,.8,.3,1) both}
+.panel.is-active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.panel__head{margin-bottom:24px}
+.kicker{
+  display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:7.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:9px;
+}
+.kicker::before{content:"";width:22px;height:1px;background:var(--amber-line)}
+.panel__head h2{
+  margin:0;font-family:var(--serif);font-size:38px;line-height:1.08;font-weight:500;letter-spacing:-.02em;
+}
+.panel__head p{margin:10px 0 0;max-width:680px;font-size:13px;line-height:1.7;color:var(--muted)}
+
+/* ---------- hero ---------- */
+.hero{padding:18px 0 8px}
+.hero__case{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+  border:1px solid var(--line-strong);border-radius:999px;padding:6px 10px;
+  margin-bottom:24px;
+}
+.hero__case i{width:5px;height:5px;border-radius:50%;background:var(--amber)}
+.hero h1{
+  margin:0;
+  font-family:var(--serif);font-size:clamp(72px,12vw,148px);line-height:.78;font-weight:400;
+  letter-spacing:-.075em;color:#f1ece2;
+  text-shadow:0 18px 70px rgba(0,0,0,.55);
+}
+.hero h1 span{display:block;margin:18px 0 0;font-family:var(--mono);font-size:9px;line-height:1.8;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);text-shadow:none}
+.hero__lede{max-width:620px;margin:24px 0 0;font-family:var(--serif);font-size:20px;line-height:1.55;color:var(--ink-soft)}
+.hero__meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.chip{
+  font-family:var(--mono);font-size:7px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line-strong);border-radius:999px;padding:5px 8px;
+}
+.chip--amber{color:var(--amber);border-color:var(--amber-line);background:var(--amber-soft)}
+.hero__note{
+  margin-top:30px;padding:15px 16px;border-left:2px solid var(--amber);
+  background:linear-gradient(90deg,rgba(216,166,87,.09),rgba(216,166,87,.015));
+  font-size:12px;line-height:1.7;color:#c9bda8;
+}
+.hero__note b{color:var(--amber);font-weight:600}
+.hero__credit{
+  margin-top:26px;font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+}
+.hero__credit b{color:var(--ink-soft);font-weight:500}
+
+/* ---------- overview cards ---------- */
+.grid{display:grid;gap:12px}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{
+  position:relative;padding:18px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(155deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  overflow:hidden;
+}
+.card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),transparent 38%);
+}
+.card__n{font-family:var(--mono);font-size:7px;letter-spacing:.18em;color:var(--amber);margin-bottom:12px}
+.card h3{margin:0;font-family:var(--serif);font-size:19px;font-weight:500;line-height:1.2}
+.card p{margin:8px 0 0;font-size:11.5px;line-height:1.65;color:var(--muted)}
+.card--rule{display:flex;flex-direction:column;justify-content:space-between;min-height:155px}
+.card--rule .rule{width:100%;height:1px;background:var(--line);margin:16px 0 12px}
+
+/* ---------- people ---------- */
+.people-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.search{
+  flex:1;min-width:220px;display:flex;align-items:center;gap:8px;
+  border:1px solid var(--line-strong);border-radius:11px;background:rgba(255,255,255,.025);
+  padding:10px 12px;
+}
+.search svg{color:var(--dim);flex:0 0 auto}
+.search input{width:100%;background:none;border:0;outline:none;font-size:12px;color:var(--ink)}
+.search input::placeholder{color:var(--dim)}
+.search:focus-within{border-color:var(--amber-line);box-shadow:0 0 0 3px rgba(216,166,87,.06)}
+.people-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.person{
+  display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+  padding:18px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(155deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  transition:transform .2s,border-color .2s,background .2s;min-height:190px;
+}
+.person:hover,.person:focus-visible{transform:translateY(-2px);border-color:var(--amber-line);background:linear-gradient(155deg,rgba(216,166,87,.08),rgba(255,255,255,.015));outline:none}
+.person__avatar{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--serif);font-size:16px;color:#f0e9dd;
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+  margin-bottom:14px;
+}
+.person__role{font-family:var(--mono);font-size:6.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--amber);margin-bottom:5px}
+.person__name{font-family:var(--serif);font-size:20px;line-height:1.1;margin:0}
+.person__line{font-size:11px;line-height:1.6;color:var(--muted);margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.person__arrow{margin-top:auto;padding-top:14px;font-family:var(--mono);font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.empty{grid-column:1/-1;padding:36px 18px;text-align:center;font-family:var(--serif);font-style:italic;color:var(--muted);border:1px dashed var(--line-strong);border-radius:var(--radius)}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;margin-top:8px}
+.timeline::before{content:"";position:absolute;left:29px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,var(--amber-line),rgba(255,255,255,.06))}
+.event{position:relative;padding:0 0 8px 62px}
+.event__dot{
+  position:absolute;left:21px;top:19px;width:17px;height:17px;border-radius:50%;
+  border:1px solid var(--amber-line);background:var(--bg);display:grid;place-items:center;
+  font-family:var(--mono);font-size:6px;color:var(--amber);
+}
+.event__head{
+  width:100%;text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:12px;
+  background:rgba(255,255,255,.025);transition:background .18s,border-color .18s;
+}
+.event__head:hover{background:rgba(255,255,255,.045);border-color:var(--line-strong)}
+.event__head:focus-visible{outline:1px solid var(--amber);outline-offset:2px}
+.event__top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.event__title{font-family:var(--serif);font-size:17px;line-height:1.25;color:var(--ink)}
+.event__when{font-family:var(--mono);font-size:6.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+.event__body{padding:12px 14px 6px;font-size:12px;line-height:1.75;color:var(--muted);display:none}
+.event__body p{margin:0 0 8px}
+.event.is-open .event__body{display:block;animation:panelIn .25s ease both}
+.event.is-open .event__head{border-color:var(--amber-line);background:rgba(216,166,87,.05)}
+.event__tag{display:inline-flex;margin-top:4px;font-family:var(--mono);font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-line);border-radius:3px;padding:2px 5px}
+.timeline-note{margin:18px 0 0 62px;font-family:var(--mono);font-size:7px;line-height:1.9;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+/* ---------- places / evidence ---------- */
+.place__type{font-family:var(--mono);font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:7px}
+.place h3{font-size:20px}
+.place p{font-size:11.5px}
+.place__note{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-family:var(--mono);font-size:6.5px;line-height:1.8;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.evidence__icon{
+  width:36px;height:36px;border-radius:10px;display:grid;place-items:center;
+  border:1px solid var(--line-strong);background:rgba(216,166,87,.06);color:var(--amber);
+  margin-bottom:12px;
+}
+.evidence h3{font-size:18px}
+.evidence__label{font-family:var(--mono);font-size:6px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-top:11px}
+
+/* ---------- themes ---------- */
+.theme{padding:20px}
+.theme__n{font-family:var(--serif);font-size:34px;line-height:1;color:rgba(216,166,87,.5);margin-bottom:14px}
+.theme h3{font-size:20px}
+.theme p{font-size:12px;line-height:1.7}
+
+/* ---------- quotes ---------- */
+.quotes{display:grid;gap:14px;max-width:900px}
+.quote{
+  padding:24px 24px 20px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(155deg,rgba(216,166,87,.065),rgba(255,255,255,.012));
+  position:relative;overflow:hidden;
+}
+.quote::before{content:"“";position:absolute;left:14px;top:-18px;font-family:var(--serif);font-size:100px;line-height:1;color:rgba(216,166,87,.12)}
+.quote blockquote{margin:0;font-family:var(--serif);font-size:22px;line-height:1.5;color:var(--ink-soft);position:relative}
+.quote cite{display:block;margin-top:16px;font-family:var(--mono);font-size:7px;font-style:normal;letter-spacing:.15em;text-transform:uppercase;color:var(--amber)}
+.quote__note{margin:8px 0 0;font-size:11px;line-height:1.6;color:var(--dim)}
+
+/* ---------- about ---------- */
+.about{max-width:900px}
+.about__name{
+  font-family:var(--serif);font-size:34px;line-height:1.2;margin:0 0 6px;color:var(--ink);
+}
+.about__role{font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin:0 0 24px}
+.about__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+.about p{font-size:12px;line-height:1.75;color:var(--muted)}
+.about h3{margin:0 0 8px;font-size:12px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.about ul{margin:0;padding-left:17px}
+.about li{font-size:11.5px;line-height:1.7;color:var(--muted);margin-bottom:6px}
+.source-list{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.source-list span{font-family:var(--mono);font-size:7px;line-height:1.7;letter-spacing:.08em;color:var(--dim)}
+
+/* ---------- footer ---------- */
+.footer{
+  position:relative;z-index:1;max-width:var(--max);margin:0 auto;
+  padding:24px 24px 34px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.footer b{color:var(--ink-soft);font-weight:500}
+
+/* ---------- modal ---------- */
+.modal-root{position:fixed;inset:0;z-index:80;pointer-events:none}
+.modal{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:auto;background:rgba(4,5,7,.72);backdrop-filter:blur(10px);animation:fadeIn .2s ease both;padding:20px}
+.modal__panel{
+  width:min(760px,100%);max-height:min(82vh,760px);overflow:auto;
+  background:linear-gradient(160deg,#15191f,#0d1014);border:1px solid var(--line-strong);
+  border-radius:22px;padding:24px;box-shadow:0 30px 90px -20px #000;animation:modalIn .3s cubic-bezier(.2,.8,.3,1) both;
+  scrollbar-width:none;
+}
+.modal__panel::-webkit-scrollbar{display:none}
+@keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.99)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal__top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.modal__close{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.07);color:var(--ink-soft);flex:0 0 auto}
+.modal__close:hover{background:rgba(255,255,255,.13);color:#fff}
+.modal__avatar{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-size:20px;border:1px solid rgba(255,255,255,.16);margin-bottom:14px}
+.modal__eyebrow{font-family:var(--mono);font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:5px}
+.modal h2{margin:0;font-family:var(--serif);font-size:36px;line-height:1.08;font-weight:500}
+.modal__role{font-size:12px;color:var(--muted);margin:8px 0 20px}
+.modal__section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.modal__section h4{margin:0 0 8px;font-family:var(--mono);font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.modal__section ul{margin:0;padding-left:16px}
+.modal__section li{font-size:12px;line-height:1.65;color:var(--ink-soft);margin-bottom:6px}
+.modal__fate{font-size:12px;line-height:1.7;color:#d9b0a8;background:rgba(216,121,121,.06);border:1px solid rgba(216,121,121,.2);border-radius:10px;padding:11px 12px}
+.modal__note{font-size:10.5px;line-height:1.7;color:var(--dim);font-style:italic;margin-top:14px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1050px){
+  .layout{grid-template-columns:210px minmax(0,1fr);gap:24px}
+  .people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid--3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .topbar__inner{padding:11px 16px;align-items:flex-start}
+  .brand__sub{display:none}
+  .topbar__credit{font-size:6px}
+  .topbar__badge{display:none}
+  .layout{display:block;padding:18px 16px 60px}
+  .sidebar{position:static;margin-bottom:22px}
+  .nav{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:4px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav__btn{flex:0 0 auto;width:auto;padding:7px 9px;border:1px solid var(--line);background:rgba(255,255,255,.025)}
+  .nav__n{display:none}
+  .nav__label{font-size:10px;white-space:nowrap}
+  .sidebar__meta{display:none}
+  .panel__head h2{font-size:31px}
+  .hero h1{font-size:clamp(62px,20vw,100px)}
+  .hero__lede{font-size:17px}
+  .people-grid,.grid--3,.grid--2,.about__grid{grid-template-columns:1fr}
+  .timeline::before{left:19px}
+  .event{padding-left:46px}
+  .event__dot{left:11px}
+  .event__top{display:block}
+  .event__when{display:block;margin-top:4px}
+  .timeline-note{margin-left:46px}
+  .modal{padding:10px}
+  .modal__panel{padding:20px;border-radius:18px}
+  .modal h2{font-size:29px}
+  .footer{padding:20px 16px 30px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#overview" aria-label="YOU Canon Archive, overview">
+      <span class="brand__mark">YOU</span>
+      <span class="brand__sub">Canon Archive</span>
+    </a>
+    <div class="topbar__credit">
+      Created by <b>Nada Farag Elsayed Farag</b>
+      <span class="topbar__badge"><i></i> Novel canon only</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="Archive sections">
+    <nav class="nav" id="nav">
+      <button class="nav__btn is-active" data-panel="overview"><span class="nav__n">01</span><span class="nav__label">Overview</span></button>
+      <button class="nav__btn" data-panel="people"><span class="nav__n">02</span><span class="nav__label">People</span></button>
+      <button class="nav__btn" data-panel="timeline"><span class="nav__n">03</span><span class="nav__label">Timeline</span></button>
+      <button class="nav__btn" data-panel="places"><span class="nav__n">04</span><span class="nav__label">Places</span></button>
+      <button class="nav__btn" data-panel="evidence"><span class="nav__n">05</span><span class="nav__label">Evidence</span></button>
+      <button class="nav__btn" data-panel="themes"><span class="nav__n">06</span><span class="nav__label">Themes</span></button>
+      <button class="nav__btn" data-panel="quotes"><span class="nav__n">07</span><span class="nav__label">Quotes</span></button>
+      <button class="nav__btn" data-panel="about"><span class="nav__n">08</span><span class="nav__label">About / Credits</span></button>
+    </nav>
+    <div class="sidebar__meta">
+      <p><b>Source text</b><br />Caroline Kepnes<br /><i>You</i> · 2014</p>
+      <div class="sidebar__rule"></div>
+      <p>Novel only<br />No Netflix-only material<br />No invented messages</p>
+      <div class="sidebar__rule"></div>
+      <p><b>Nada Farag Elsayed Farag</b><br />Creator</p>
+    </div>
+  </aside>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section class="panel is-active" id="overview" aria-labelledby="overviewTitle">
+      <div class="hero">
+        <div class="hero__case"><i></i> Case file · novel canon</div>
+        <h1>YOU<span>Caroline Kepnes · 2014</span></h1>
+        <p class="hero__lede">A canon-faithful interactive study of obsession, surveillance, and the story Joe Goldberg tells himself about love.</p>
+        <div class="hero__meta">
+          <span class="chip chip--amber">Second-person narration</span>
+          <span class="chip">New York City</span>
+          <span class="chip">Spoilers follow</span>
+          <span class="chip">Novel ≠ TV series</span>
+        </div>
+        <div class="hero__note">
+          <b>Fidelity note.</b> This archive follows Caroline Kepnes’s novel, not the Netflix adaptation. It deliberately excludes invented emails, texts, voicemails, timestamps, and burner accounts. Where the novel is silent, the app says so instead of filling the gap.
+        </div>
+        <div class="hero__credit">Created by <b>Nada Farag Elsayed Farag</b></div>
+      </div>
+
+      <div class="grid grid--3" style="margin-top:34px">
+        <article class="card card--rule">
+          <div>
+            <div class="card__n">01 / THE CASE</div>
+            <h3>He calls it love.</h3>
+            <p>Joe Goldberg meets Guinevere Beck at Mooney Rare &amp; Used Books and turns a brief encounter into a campaign of surveillance, manipulation, and murder.</p>
+          </div>
+          <div class="rule"></div>
+          <p style="margin:0">The novel is addressed to Beck in the second person. Everything we know is filtered through Joe’s voice.</p>
+        </article>
+        <article class="card card--rule">
+          <div>
+            <div class="card__n">02 / THE METHOD</div>
+            <h3>Evidence, not invention.</h3>
+            <p>People, places, objects, and events are drawn from the novel. No fabricated message threads or fake archive records are used.</p>
+          </div>
+          <div class="rule"></div>
+          <p style="margin:0">Short quotations are cited by chapter and page. Uncertain details are labelled as uncertain.</p>
+        </article>
+        <article class="card card--rule">
+          <div>
+            <div class="card__n">03 / THE WARNING</div>
+            <h3>This is a story about a stalker.</h3>
+            <p>Joe’s charm is part of the novel’s design. The archive does not soften his violence or treat possession as romance.</p>
+          </div>
+          <div class="rule"></div>
+          <p style="margin:0">Content note: stalking, intimate partner violence, murder, captivity, sexual content, and suicide.</p>
+        </article>
+      </div>
+
+      <div class="grid grid--2" style="margin-top:12px">
+        <article class="card">
+          <div class="card__n">04 / HOW TO USE</div>
+          <h3>Eight ways into the archive.</h3>
+          <p><b style="color:var(--ink-soft)">People</b> opens character dossiers. <b style="color:var(--ink-soft)">Timeline</b> follows the novel’s sequence. <b style="color:var(--ink-soft)">Places</b> and <b style="color:var(--ink-soft)">Evidence</b> track the physical world. <b style="color:var(--ink-soft)">Themes</b> and <b style="color:var(--ink-soft)">Quotes</b> support close reading. <b style="color:var(--ink-soft)">About</b> explains the canon rules and sources.</p>
+        </article>
+        <article class="card">
+          <div class="card__n">05 / CANON BOUNDARY</div>
+          <h3>What is deliberately excluded.</h3>
+          <p>The Netflix series changes Beck’s program and genre, adds characters such as Annika, and alters Peach’s death. Those choices belong to the adaptation, not the novel. This archive keeps them out.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PEOPLE -->
+    <section class="panel" id="people" aria-labelledby="peopleTitle">
+      <div class="panel__head">
+        <div class="kicker">02 · Dossiers</div>
+        <h2 id="peopleTitle">People</h2>
+        <p>Character profiles grounded in the novel. Click a dossier for relationships, canon facts, and fate.</p>
+      </div>
+      <div class="people-tools">
+        <label class="search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+          <input id="peopleSearch" type="search" placeholder="Search characters, roles, relationships…" aria-label="Search character dossiers" />
+        </label>
+        <span class="chip" id="peopleCount">8 dossiers</span>
+      </div>
+      <div class="people-grid" id="peopleGrid"></div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="panel" id="timeline" aria-labelledby="timelineTitle">
+      <div class="panel__head">
+        <div class="kicker">03 · Sequence</div>
+        <h2 id="timelineTitle">Timeline</h2>
+        <p>The novel’s action in order. The text does not provide a reliable precise calendar, so this archive uses sequence rather than invented timestamps.</p>
+      </div>
+      <div class="timeline" id="timelineList"></div>
+      <p class="timeline-note">Open each event for detail · spoilers follow · sequence follows the novel, not the series</p>
+    </section>
+
+    <!-- PLACES -->
+    <section class="panel" id="places" aria-labelledby="placesTitle">
+      <div class="panel__head">
+        <div class="kicker">04 · Geography</div>
+        <h2 id="placesTitle">Places</h2>
+        <p>The rooms and streets that structure the novel’s geography of access, class, and confinement.</p>
+      </div>
+      <div class="grid grid--2" id="placesGrid"></div>
+    </section>
+
+    <!-- EVIDENCE -->
+    <section class="panel" id="evidence" aria-labelledby="evidenceTitle">
+      <div class="panel__head">
+        <div class="kicker">05 · Objects</div>
+        <h2 id="evidenceTitle">Evidence</h2>
+        <p>Objects that carry the plot. Each entry describes what the novel establishes — not a speculative reconstruction.</p>
+      </div>
+      <div class="grid grid--3" id="evidenceGrid"></div>
+    </section>
+
+    <!-- THEMES -->
+    <section class="panel" id="themes" aria-labelledby="themesTitle">
+      <div class="panel__head">
+        <div class="kicker">06 · Reading</div>
+        <h2 id="themesTitle">Themes</h2>
+        <p>Six critical lenses for the novel’s central concerns.</p>
+      </div>
+      <div class="grid grid--2" id="themesGrid"></div>
+    </section>
+
+    <!-- QUOTES -->
+    <section class="panel" id="quotes" aria-labelledby="quotesTitle">
+      <div class="panel__head">
+        <div class="kicker">07 · Close reading</div>
+        <h2 id="quotesTitle">Quotes</h2>
+        <p>Short quotations for study, with chapter and page references from the 2014 Atria/Emily Bestler edition. Verify against your own copy before quoting in an essay.</p>
+      </div>
+      <div class="quotes" id="quotesList"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="panel" id="about" aria-labelledby="aboutTitle">
+      <div class="panel__head">
+        <div class="kicker">08 · About / Credits</div>
+        <h2 id="aboutTitle">About this archive</h2>
+        <p>A canon-faithful interactive study of Caroline Kepnes’s <i>You</i> (2014).</p>
+      </div>
+      <div class="about">
+        <h3 class="about__name">Nada Farag Elsayed Farag</h3>
+        <p class="about__role">Creator · research · interface · code</p>
+        <p>This project is a single-file web application. It uses no external CSS, JavaScript, fonts, or images. The visual language is an editorial case file: dark, restrained, and built around the novel’s themes of surveillance and interpretation.</p>
+
+        <div class="about__grid">
+          <article class="card">
+            <h3>Canon contract</h3>
+            <ul>
+              <li>The source is Caroline Kepnes’s novel <i>You</i> (2014).</li>
+              <li>No invented emails, texts, voicemails, or burner accounts.</li>
+              <li>No precise dates or timestamps that the novel does not supply.</li>
+              <li>TV-only characters and plot changes are excluded.</li>
+              <li>Uncertain details are labelled, not resolved by invention.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>What this is not</h3>
+            <ul>
+              <li>It is not a facsimile of Beck’s phone.</li>
+              <li>It is not a claim that Joe’s narration is objective truth.</li>
+              <li>It is not a substitute for reading the novel.</li>
+              <li>It is not an official companion or adaptation.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="about__grid">
+          <article class="card">
+            <h3>Canon boundaries</h3>
+            <ul>
+              <li>The novel presents Beck primarily as a fiction writer; the TV series makes her a poet at NYU.</li>
+              <li>Annika is a TV-only character; the novel’s friendship circle includes Chana and Lynn.</li>
+              <li>Peach’s death is staged differently in the series; this archive follows the novel.</li>
+              <li>The novel does not state a precise calendar year for the action.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Sources</h3>
+            <div class="source-list">
+              <span>Caroline Kepnes, <i>You</i>. Atria/Emily Bestler Books, 2014.</span>
+              <span>Author’s official description and publisher materials.</span>
+              <span>Chapter and page citations for quoted lines: ch. 45, p. 233; ch. 46, p. 236; ch. 51, p. 261.</span>
+              <span>Character and plot details checked against the novel; TV-specific material excluded.</span>
+              <span>Quotations are short and used for study and criticism.</span>
+            </div>
+          </article>
+        </div>
+
+        <p style="margin-top:22px;font-family:var(--mono);font-size:7px;line-height:1.9;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)">
+          Created by Nada Farag Elsayed Farag · An unauthorised, non-commercial university project · Not affiliated with Caroline Kepnes or her publishers.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="footer">
+  <span>YOU · A Canon Archive · after Caroline Kepnes</span>
+  <span>Created by <b>Nada Farag Elsayed Farag</b></span>
+</footer>
+
+<div class="modal-root" id="modalRoot"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DATA — characters
+   ============================================================ */
+const PEOPLE = [
+  {
+    id: "joe",
+    name: "Joe Goldberg",
+    initials: "JG",
+    role: "Narrator · manager of Mooney Rare & Used Books",
+    color: "linear-gradient(160deg,#6b5636,#33281a)",
+    line: "The man who turns surveillance into a love story.",
+    facts: [
+      "Works at Mooney Rare & Used Books and lives in Bed-Stuy, Brooklyn.",
+      "Meets Guinevere Beck when she comes into the store and learns her name from the credit-card receipt.",
+      "Stalks Beck online and physically, then uses what he learns to shape their relationship.",
+      "Narrates the novel in the second person, addressing Beck as “you.”"
+    ],
+    relationships: [
+      "Beck — obsession",
+      "Benji — rival",
+      "Peach — rival",
+      "Mr. Mooney — mentor and adoptive father",
+      "Candace — ex-girlfriend"
+    ],
+    fate: "Survives. At the novel’s end, a new woman — Amy Adam — enters the bookstore, and Joe’s attention shifts to her.",
+    note: "The novel does not give a precise age for Joe. Later books add a fuller legal name; this archive uses only what You establishes."
+  },
+  {
+    id: "beck",
+    name: "Guinevere “Beck” Beck",
+    initials: "GB",
+    role: "Writer · MFA student",
+    color: "linear-gradient(160deg,#7a5a6b,#402b36)",
+    line: "A writer who wants to be seen — and is watched instead.",
+    facts: [
+      "A Brown University graduate studying for an MFA in writing in New York.",
+      "Lives on Bank Street in the West Village; her family home is in Nantucket.",
+      "Financially strained and socially entangled with a wealthier circle.",
+      "The novel’s friendship circle includes Chana and Lynn; Annika is a TV-only character."
+    ],
+    relationships: [
+      "Benji — on-again, off-again boyfriend",
+      "Joe — boyfriend and stalker",
+      "Peach — closest friend",
+      "Dr. Nicky — therapist and affair partner"
+    ],
+    fate: "Killed by Joe after she discovers his crimes and tries to escape the bookstore cage.",
+    note: "The novel presents Beck primarily as a fiction writer. The TV series changes her to a poet at NYU; that change is not used here."
+  },
+  {
+    id: "benji",
+    name: "Benji Ashby",
+    initials: "BA",
+    role: "Beck’s wealthy, on-again/off-again boyfriend",
+    color: "linear-gradient(160deg,#4b5f73,#23303d)",
+    line: "Privilege, charm, and a fatal peanut allergy.",
+    facts: [
+      "Runs an artisanal club-soda business and moves through wealthy New York circles.",
+      "Is pretentious, evasive, and careless with Beck’s feelings.",
+      "Has a secret storage locker and a serious peanut allergy.",
+      "Joe imprisons him in the glass cage beneath Mooney’s and kills him with peanut oil in a latte."
+    ],
+    relationships: [
+      "Beck — on-again, off-again partner",
+      "Joe — rival and killer",
+      "Peach — social circle"
+    ],
+    fate: "Killed by Joe. His body is burned and his disappearance is staged.",
+    note: "The novel does not make Benji a simple villain: he is careless and privileged, but Joe’s contempt for him is also self-serving."
+  },
+  {
+    id: "peach",
+    name: "Peach Salinger",
+    initials: "PS",
+    role: "Beck’s wealthy, possessive friend",
+    color: "linear-gradient(160deg,#7d3f52,#3d1c27)",
+    line: "A friend whose love is another form of ownership.",
+    facts: [
+      "Comes from the wealthy Salinger family and has a family estate in Little Compton, Rhode Island.",
+      "Has interstitial cystitis, a chronic bladder condition.",
+      "Is secretly obsessed with Beck and uses money, access, and guilt to keep her close.",
+      "Becomes suspicious of Joe and is attacked by him during a run; she survives the first attack."
+    ],
+    relationships: [
+      "Beck — closest friend and obsession",
+      "Joe — rival",
+      "The Salinger family"
+    ],
+    fate: "Killed by Joe at Little Compton; her death is staged as a suicide.",
+    note: "Peach’s death is handled differently in the Netflix series. This archive follows the novel."
+  },
+  {
+    id: "nicky",
+    name: "Dr. Nicky Angevine",
+    initials: "NA",
+    role: "Beck’s therapist",
+    color: "linear-gradient(160deg,#56624f,#2a3227)",
+    line: "The therapist who crosses a line — and pays for another man’s crimes.",
+    facts: [
+      "Is married with children.",
+      "Begins treating Beck after Peach’s death.",
+      "Has an affair with Beck.",
+      "Joe impersonates a patient to spy on him, then uses Beck’s manuscript to frame him for her murder."
+    ],
+    relationships: [
+      "Beck — patient and affair partner",
+      "Joe — patient / manipulator",
+      "His wife and children"
+    ],
+    fate: "Framed and convicted for Beck’s murder.",
+    note: "The novel’s Nicky is complicit in the affair but not in the murders. The TV series changes his role; this archive follows the novel."
+  },
+  {
+    id: "mooney",
+    name: "Ivan Mooney",
+    initials: "IM",
+    role: "Owner of Mooney’s · Joe’s mentor",
+    color: "linear-gradient(160deg,#4b505a,#1c1f24)",
+    line: "The man who gave Joe a job, a cage, and a way of seeing the world.",
+    facts: [
+      "Owns Mooney Rare & Used Books.",
+      "Takes Joe in and mentors him in the book trade.",
+      "Locks Joe in the glass cage as a child — a punishment that shapes Joe’s relationship to confinement.",
+      "Later suffers a stroke and is unable to communicate."
+    ],
+    relationships: [
+      "Joe — employee, surrogate son",
+      "The bookstore"
+    ],
+    fate: "Suffers a stroke; later unable to communicate.",
+    note: "The cage is both a rare-book storage unit and the site of Joe’s childhood punishment. Its meaning is central to the novel."
+  },
+  {
+    id: "candace",
+    name: "Candace",
+    initials: "C",
+    role: "Joe’s ex-girlfriend",
+    color: "linear-gradient(160deg,#3d547a,#1d2a3f)",
+    line: "The past Joe does not narrate honestly.",
+    facts: [
+      "Joe’s former girlfriend.",
+      "Joe’s violence against her is part of his backstory.",
+      "Joe believes he killed her; she survives.",
+      "Her return is developed in later novels, not in You."
+    ],
+    relationships: [
+      "Joe — ex-girlfriend"
+    ],
+    fate: "Survives. Her later return belongs to the sequels.",
+    note: "In You, Candace is mainly backstory. Do not merge her later-book arc into a novel-only timeline."
+  },
+  {
+    id: "amy",
+    name: "Amy Adam",
+    initials: "AA",
+    role: "The next obsession",
+    color: "linear-gradient(160deg,#5a4b6e,#2c2338)",
+    line: "The final turn of the screw.",
+    facts: [
+      "Enters Mooney’s at the end of the novel.",
+      "Joe’s attention shifts to her almost immediately.",
+      "Her arrival implies that the cycle of obsession will repeat."
+    ],
+    relationships: [
+      "Joe — new object of obsession"
+    ],
+    fate: "The novel ends with Joe preparing to pursue her.",
+    note: "She is not a major presence in You; she is the final signal that Joe has not changed."
+  }
+];
+
+/* ============================================================
+   DATA — timeline
+   ============================================================ */
+const TIMELINE = [
+  { n: "01", title: "The meeting at Mooney’s", when: "Opening", body: "Guinevere Beck walks into Mooney Rare & Used Books. Joe Goldberg waits on her, flirts, and reads the name on her credit-card receipt. He immediately begins searching for her online." },
+  { n: "02", title: "The engineered encounter", when: "Early sequence", body: "Joe uses Beck’s public social media to learn where she will be and arranges a second, apparently accidental meeting at a bar in Brooklyn." },
+  { n: "03", title: "The stolen phone", when: "Early sequence", body: "Joe steals Beck’s phone and gains access to her emails and messages. He uses what he reads to tailor his behavior to what she wants." },
+  { n: "04", title: "The relationship", when: "Middle sequence", body: "Joe and Beck begin dating. Joe presents himself as the attentive, literary man she has been looking for, while concealing the surveillance that makes his attentiveness possible." },
+  { n: "05", title: "Benji in the cage", when: "Middle sequence", body: "Joe lures Benji to the basement of Mooney’s under a business pretext and imprisons him in the glass cage used for rare books." },
+  { n: "06", title: "Benji’s death", when: "Middle sequence", body: "Joe kills Benji with a peanut-oil-laced latte, exploiting Benji’s allergy. He burns the body and stages Benji’s disappearance." },
+  { n: "07", title: "Peach’s suspicion", when: "Middle sequence", body: "Peach becomes suspicious of Joe and tries to protect Beck. Joe attacks Peach during a run; she survives the first attack." },
+  { n: "08", title: "Little Compton", when: "Turning point", body: "Joe follows Beck and Peach to the Salinger family estate in Little Compton. He kills Peach there and stages her death as a suicide." },
+  { n: "09", title: "Therapy and the affair", when: "After Peach", body: "After Peach’s death, Beck begins therapy with Dr. Nicky Angevine. Joe impersonates a patient to spy on him. Beck and Nicky begin an affair." },
+  { n: "10", title: "The discovery", when: "Late sequence", body: "Beck discovers evidence of Joe’s stalking and his connection to Benji and Peach. The relationship collapses into confrontation." },
+  { n: "11", title: "The cage", when: "Climax", body: "Joe imprisons Beck in the bookstore’s glass cage. He frames the confinement as necessary for their love." },
+  { n: "12", title: "Beck’s death", when: "Climax", body: "Beck tries to escape. Joe kills her and buries her outside the city." },
+  { n: "13", title: "The frame", when: "Aftermath", body: "Joe uses Beck’s manuscript and final writings to frame Dr. Nicky for her murder. Nicky is convicted." },
+  { n: "14", title: "The ending", when: "Coda", body: "Beck’s book is published. Joe remains free. Amy Adam enters Mooney’s, and Joe’s attention moves to her — the cycle begins again." }
+];
+
+/* ============================================================
+   DATA — places
+   ============================================================ */
+const PLACES = [
+  { type: "Bookstore", title: "Mooney Rare & Used Books", body: "The Lower East Side/East Village bookstore where Joe works and where he first meets Beck. Its basement houses the glass cage for rare books.", note: "The store is Joe’s workplace, social stage, and site of violence." },
+  { type: "Apartment", title: "Bank Street", body: "Beck’s apartment in the West Village. Joe watches her window and learns her routines from the street.", note: "The novel’s geography of surveillance begins with a window." },
+  { type: "Neighborhood", title: "Bed-Stuy, Brooklyn", body: "Joe’s neighborhood. His commute to the bookstore crosses the city’s social and economic distances.", note: "Class and geography are part of the novel’s pressure system." },
+  { type: "Estate", title: "Little Compton, Rhode Island", body: "The Salinger family’s coastal estate. Peach invites Beck there; Joe follows. Peach is killed there.", note: "The estate isolates Beck and removes the ordinary safeguards of the city." },
+  { type: "Confinement", title: "The glass cage", body: "A soundproof glass cage in the bookstore basement, used for rare books. Mr. Mooney locked Joe inside as a child; Joe later uses it on Benji and Beck.", note: "The cage is the novel’s central image of love-as-possession." },
+  { type: "Origin", title: "Nantucket", body: "Beck’s family home and the source of her sense of class, belonging, and shame.", note: "The novel places Beck between Nantucket and the wealthy New York circles she moves through." }
+];
+
+/* ============================================================
+   DATA — evidence
+   ============================================================ */
+const EVIDENCE = [
+  { title: "The credit-card receipt", body: "Joe reads Beck’s name from the receipt after her purchase. It is the first link in the chain of surveillance.", label: "The origin of the plot" },
+  { title: "Beck’s stolen phone", body: "Joe steals Beck’s phone and reads her emails and messages. It gives him access to her private life and the illusion of intimacy.", label: "Surveillance device" },
+  { title: "The glass cage", body: "A rare-book storage unit in Mooney’s basement. It becomes a prison for Benji and then for Beck.", label: "Instrument of confinement" },
+  { title: "The peanut-oil latte", body: "Joe uses Benji’s peanut allergy to kill him. The murder is disguised as an accidental reaction.", label: "Weapon" },
+  { title: "Benji’s phone and accounts", body: "Joe uses Benji’s phone and social media to stage a disappearance and keep Beck from looking for him.", label: "False trail" },
+  { title: "Peach’s email and accounts", body: "After killing Peach, Joe uses her accounts to send a farewell message and stage her death as a suicide.", label: "Staged death" },
+  { title: "Beck’s manuscript", body: "Beck writes during her captivity. Joe later uses her final writings to frame Dr. Nicky for her murder.", label: "The frame" },
+  { title: "Joe’s hidden keepsakes", body: "Joe keeps mementos from the people he has watched and harmed. Beck’s discovery of his hidden life is the turning point.", label: "The evidence of obsession" }
+];
+
+/* ============================================================
+   DATA — themes
+   ============================================================ */
+const THEMES = [
+  { n: "01", title: "Obsession as love", body: "Joe translates surveillance, possession, and control into the language of romance. The novel forces the reader to feel the seduction and then recognize the violence." },
+  { n: "02", title: "Surveillance and privacy", body: "The phone, the credit-card receipt, social media, and the window are all technologies of access. Joe’s intimacy is built on violated privacy." },
+  { n: "03", title: "Class and privilege", body: "Benji and Peach have money, access, and social power. Joe’s resentment of them is real, but it also gives him a story that justifies his violence." },
+  { n: "04", title: "The unreliable narrator", body: "The second-person address makes the reader complicit in Joe’s perspective. The novel’s tension comes from noticing what his voice edits out." },
+  { n: "05", title: "Consumption and ownership", body: "Books, brands, apartments, and people are all objects to be acquired. Joe’s love language is ownership: “You should own what you love.”" },
+  { n: "06", title: "The romantic-comedy mask", body: "Joe’s courtship borrows the gestures of romantic comedy — the chance meeting, the grand gesture, the devoted lover — and reveals the coercion underneath." }
+];
+
+/* ============================================================
+   DATA — quotes
+   ============================================================ */
+const QUOTES = [
+  { text: "You should own what you love, it’s that simple.", cite: "Chapter 45 · p. 233", note: "Joe’s theory of love as ownership, stated with terrifying simplicity." },
+  { text: "When I text you and you don’t respond right away, I let it go. And now it’s your turn to let it go.", cite: "Chapter 46 · p. 236", note: "Joe’s double standard, presented as fairness." },
+  { text: "You are. Were.", cite: "Chapter 51 · p. 261", note: "The shift from present to past tense: Joe’s narration registers Beck’s death." }
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[ch]));
+}
+
+function initialsFor(name) {
+  const parts = name.replace(/[“”]/g, "").split(/\s+/).filter(Boolean);
+  return parts.slice(0, 2).map(p => p[0]).join("").toUpperCase();
+}
+
+function renderPeople() {
+  const grid = $("#peopleGrid");
+  if (!grid) return;
+  grid.innerHTML = PEOPLE.map(p => `
+    <button class="person" data-person="${p.id}" aria-label="Open dossier for ${escapeHtml(p.name)}">
+      <span class="person__avatar" style="background:${p.color}">${escapeHtml(p.initials || initialsFor(p.name))}</span>
+      <span class="person__role">${escapeHtml(p.role)}</span>
+      <span class="person__name">${escapeHtml(p.name)}</span>
+      <span class="person__line">${escapeHtml(p.line)}</span>
+      <span class="person__arrow">Open dossier →</span>
+    </button>`).join("");
+  $("#peopleCount").textContent = PEOPLE.length + " dossiers";
+}
+
+function renderTimeline() {
+  const list = $("#timelineList");
+  if (!list) return;
+  list.innerHTML = TIMELINE.map((e, i) => `
+    <article class="event" data-event="${i}">
+      <span class="event__dot">${e.n}</span>
+      <button class="event__head" aria-expanded="false" aria-controls="event-body-${i}">
+        <span class="event__top">
+          <span class="event__title">${escapeHtml(e.title)}</span>
+          <span class="event__when">${escapeHtml(e.when)}</span>
+        </span>
+      </button>
+      <div class="event__body" id="event-body-${i}">
+        <p>${escapeHtml(e.body)}</p>
+        <span class="event__tag">novel canon</span>
+      </div>
+    </article>`).join("");
+
+  $$(".event__head", list).forEach(btn => {
+    btn.addEventListener("click", () => {
+      const event = btn.closest(".event");
+      const open = event.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", String(open));
+    });
+  });
+}
+
+function renderPlaces() {
+  const grid = $("#placesGrid");
+  if (!grid) return;
+  grid.innerHTML = PLACES.map(p => `
+    <article class="card place">
+      <div class="place__type">${escapeHtml(p.type)}</div>
+      <h3>${escapeHtml(p.title)}</h3>
+      <p>${escapeHtml(p.body)}</p>
+      <div class="place__note">${escapeHtml(p.note)}</div>
+    </article>`).join("");
+}
+
+function renderEvidence() {
+  const grid = $("#evidenceGrid");
+  if (!grid) return;
+  const icon = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M6 7l1 14h10l1-14"/></svg>';
+  grid.innerHTML = EVIDENCE.map(e => `
+    <article class="card evidence">
+      <div class="evidence__icon">${icon}</div>
+      <h3>${escapeHtml(e.title)}</h3>
+      <p>${escapeHtml(e.body)}</p>
+      <div class="evidence__label">${escapeHtml(e.label)}</div>
+    </article>`).join("");
+}
+
+function renderThemes() {
+  const grid = $("#themesGrid");
+  if (!grid) return;
+  grid.innerHTML = THEMES.map(t => `
+    <article class="card theme">
+      <div class="theme__n">${t.n}</div>
+      <h3>${escapeHtml(t.title)}</h3>
+      <p>${escapeHtml(t.body)}</p>
+    </article>`).join("");
+}
+
+function renderQuotes() {
+  const list = $("#quotesList");
+  if (!list) return;
+  list.innerHTML = QUOTES.map(q => `
+    <article class="quote">
+      <blockquote>${escapeHtml(q.text)}</blockquote>
+      <cite>${escapeHtml(q.cite)}</cite>
+      <p class="quote__note">${escapeHtml(q.note)}</p>
+    </article>`).join("");
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showPanel(id, updateHash = true) {
+  const panel = document.getElementById(id);
+  if (!panel) return;
+  $$(".panel").forEach(p => p.classList.toggle("is-active", p.id === id));
+  $$(".nav__btn").forEach(b => b.classList.toggle("is-active", b.dataset.panel === id));
+  if (updateHash) {
+    try { history.replaceState(null, "", "#" + id); } catch (err) {}
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ============================================================
+   PERSON MODAL
+   ============================================================ */
+function openPerson(id) {
+  const p = PEOPLE.find(x => x.id === id);
+  if (!p) return;
+  const root = $("#modalRoot");
+  root.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(p.name)} dossier">
+      <div class="modal__panel">
+        <div class="modal__top">
+          <div>
+            <div class="modal__avatar" style="background:${p.color}">${escapeHtml(p.initials || initialsFor(p.name))}</div>
+            <div class="modal__eyebrow">Character dossier</div>
+            <h2>${escapeHtml(p.name)}</h2>
+            <p class="modal__role">${escapeHtml(p.role)}</p>
+          </div>
+          <button class="modal__close" id="modalClose" aria-label="Close dossier">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="modal__section">
+          <h4>Canon facts</h4>
+          <ul>${p.facts.map(f => `<li>${escapeHtml(f)}</li>`).join("")}</ul>
+        </div>
+
+        <div class="modal__section">
+          <h4>Relationships</h4>
+          <ul>${p.relationships.map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ul>
+        </div>
+
+        <div class="modal__section">
+          <h4>Fate</h4>
+          <div class="modal__fate">${escapeHtml(p.fate)}</div>
+        </div>
+
+        <div class="modal__section">
+          <h4>Canon note</h4>
+          <p class="modal__note">${escapeHtml(p.note)}</p>
+        </div>
+      </div>
+    </div>`;
+
+  const close = () => { root.innerHTML = ""; };
+  $("#modalClose", root).addEventListener("click", close);
+  $(".modal", root).addEventListener("click", ev => {
+    if (ev.target === ev.currentTarget) close();
+  });
+  document.addEventListener("keydown", function esc(ev) {
+    if (ev.key === "Escape") { close(); document.removeEventListener("keydown", esc); }
+  });
+  $("#modalClose", root).focus({ preventScroll: true });
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+function bindPeopleSearch() {
+  const input = $("#peopleSearch");
+  if (!input) return;
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    const cards = $$(".person");
+    let visible = 0;
+    cards.forEach(card => {
+      const p = PEOPLE.find(x => x.id === card.dataset.person);
+      const haystack = [p.name, p.role, p.line, ...p.facts, ...p.relationships].join(" ").toLowerCase();
+      const show = !q || haystack.includes(q);
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    $("#peopleCount").textContent = visible + " dossier" + (visible === 1 ? "" : "s");
+    let empty = $("#peopleGrid .empty");
+    if (!visible && !empty) {
+      empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No dossier matches that search.";
+      $("#peopleGrid").appendChild(empty);
+    } else if (visible && empty) {
+      empty.remove();
+    }
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  renderPeople();
+  renderTimeline();
+  renderPlaces();
+  renderEvidence();
+  renderThemes();
+  renderQuotes();
+  bindPeopleSearch();
+
+  $$(".nav__btn").forEach(btn => {
+    btn.addEventListener("click", () => showPanel(btn.dataset.panel));
+  });
+
+  document.addEventListener("click", ev => {
+    const person = ev.target.closest ? ev.target.closest("[data-person]") : null;
+    if (person) openPerson(person.dataset.person);
+  });
+
+  const hash = window.location.hash.replace("#", "");
+  if (hash && document.getElementById(hash)) {
+    showPanel(hash, false);
+  }
+
+  window.addEventListener("hashchange", () => {
+    const id = window.location.hash.replace("#", "");
+    if (id && document.getElementById(id)) showPanel(id, false);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
